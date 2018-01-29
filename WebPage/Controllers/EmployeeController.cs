@@ -35,6 +35,7 @@ namespace WebPage.Controllers
 
         #region Metodos
 
+        //retorna o contador para a criacao dos fields de dependentes
         [Route("returncont")]
         public ActionResult ReturnCont()
         {
@@ -44,6 +45,7 @@ namespace WebPage.Controllers
             return Content(cont.ToString());
         }
 
+        //retorna a lista de dependentes associados a um funcionario
         [Route("returndependentname/{employeeId:Guid}")]
         public ActionResult returnDependentName(Guid employeeId)
         {
@@ -60,6 +62,7 @@ namespace WebPage.Controllers
             return Content(dependentList);
         }
 
+        //retorna o nome do funcionario
         [Route("returnemployeename/{employeeId:Guid}")]
         public ActionResult returnEmployeeName(Guid employeeId)
         {
@@ -74,22 +77,7 @@ namespace WebPage.Controllers
             }
             return Content(employeeName);
         }
-
-        [Route("ordenatabelaviewhoras/{ordHr}")]
-        public ActionResult OrdenaTabelaViewHoras(string ordHr)
-        {
-            int? page = 1;
-            try
-            {
-                return RedirectToAction("viewhoras", "horas", new { page, ordHr });
-            }
-            catch (Exception e)
-            {
-                TempData["mensagemErro"] = e.Message;
-                return RedirectToAction("viewhoras", "horas", new { });
-            }
-        }
-
+        
         #endregion
 
         #region Lista

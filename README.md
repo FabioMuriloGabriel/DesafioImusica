@@ -21,8 +21,3 @@ no projeto "WebPage".
 	3.5 - Existe um botão "Gerar Relatório" na página de consulta dos funcionários, o mesmo gera um arquivo excel utilizando o EPPlus
 	
 	3.6 - Foi criada uma otimização da query que faz a consulta dos funcionários, a mesma faz a busca sempre de 10 em 10 tuplas sempre se baseando na paginação
-	
-	3.7 - Foi criada uma regra de negócio a qual o funcionário deve ter pelo menos 16 anos
-	
-
-
