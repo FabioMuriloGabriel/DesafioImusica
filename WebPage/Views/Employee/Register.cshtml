@@ -1,0 +1,190 @@
+﻿@model DAL.DTO.RegisterEmployeeDTO
+
+@{
+    ViewBag.Title = "Cadastro de Funcionário";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<ol class="breadcrumb">
+    @{ int? page = null;}
+    <li><a href="@Url.Action("index","home", new { page } )">Home</a></li>
+    <li><a href="@Url.Action("listemployee","employee", new { page } )">Consultar Funcionário</a></li>
+    <li class="active">Cadastra Funcionário</li>
+</ol>
+
+@using (Html.BeginForm("registeremployee", "employee", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Cadastro de Funcionário</h3>
+        </div>
+        <div class="panel-body">
+
+            @if (TempData["mensagemSucesso"] != null)
+            {
+                <div class="row">
+                    <div class="alert alert-dismissible alert-info col-md-12 col-sm-12 col-xs-12">
+                        <img src="~/Images/ic_done_all_black_18dp_1x.png" />
+                        @Html.Raw(@TempData["mensagemSucesso"])
+                    </div>
+                </div>
+            }
+
+            @if (TempData["mensagemErro"] != null)
+            {
+                <div class="row">
+                    <div class="alert alert-dismissible alert-danger col-md-12 col-sm-12 col-xs-12">
+                        <img src="~/Images/ic_warning_black_18dp_1x.png" />
+                        @Html.Raw(@TempData["mensagemErro"])
+                    </div>
+                </div>
+            }
+            <div class="row">
+
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @onfocus = "true", @tabindex = "1", @maxlength = "100", @required = "required" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @tabindex = "2", @maxlength = "100" })
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    @Html.LabelFor(model => model.Genre, new { @class = "control-label" })<br />
+                    <table>
+                        <tr>
+                            <td>
+                                @Html.RadioButtonFor(model => model.Genre, "M", new { @tabindex = "3", @required = "required" }) @Html.Label("Masculino")
+                                @Html.RadioButtonFor(model => model.Genre, "F", new { @tabindex = "3", @required = "required" }) @Html.Label("Feminino")
+                            </td>
+                        </tr>
+                    </table>
+                    @Html.ValidationMessageFor(model => model.Genre)
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    @Html.LabelFor(model => model.Birth, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Birth, new { @class = "form-control dateMask", @tabindex = "4", @maxlength = "10" })
+                    @Html.ValidationMessageFor(model => model.Birth)
+                </div>
+
+            </div>
+            <br />
+            <div class="row">
+
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    @Html.LabelFor(model => model.RoleId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.RoleId, new SelectList(Model.Role, "Value", "Text"), "- Escolha uma opção -", new { @class = "form-control", @tabindex = "5", @required = "required" })
+                    @Html.ValidationMessageFor(model => model.RoleId)
+                </div>
+
+                <div class="col-md-3 col-sm-4 col-xs-12" id="btnDiv">
+                    @Html.Label("Adicionar dependente ", new { @class = "control-label" })
+                    <br />
+                    <a id="btn" role="button" data-toggle="modal">
+                        <img src="~/Images/ic_add_black_18dp_1x.png" title="Adicionar dependente" class="btn btn-info btn-xs" />
+                    </a>
+                </div>
+            </div>
+
+            @Html.HiddenFor(model => model.Id)
+
+            @if (Model.DependentNameId != null)
+            {
+                if (Model.DependentNameId.Length > 0)
+                {
+                    <br />
+                    for (int i = 0; i < Model.DependentNameId.Length; i++)
+                    {
+                        <div class="row" id="div_@i">
+                            <div class="col-md-3 col-sm-6 col-xs-11">
+                                @Html.Label("Nome Dependente *", new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.DependentName[i], new { @class = "form-control", @maxlength = "100", @required = "required" })
+                                @Html.ValidationMessageFor(model => model.DependentName[i])
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                @Html.Label("Excluir Dependente *", new { @class = "control-label" })
+                                <table>
+                                    <tr>
+                                        <td>
+                                            @Html.RadioButtonFor(model => model.RemoveDependent[i], "S", new { @required = "required" }) @Html.Label("Sim")
+                                            @Html.RadioButtonFor(model => model.RemoveDependent[i], "N", new { @checked = "checked", @required = "required" }) @Html.Label("Não")
+                                        </td>
+                                    </tr>
+                                </table>
+                                @Html.ValidationMessageFor(model => model.Genre)
+                            </div>
+                        </div>
+                        <br />
+                    }
+                }
+            }
+            <br />
+            <div class="enableShow">
+
+            </div>
+
+            <br />
+            <br />
+            <p style="color: red">Campos com * são obrigatórios</p>
+            <div class="row">
+                <div class="col-md-2" style="float:right">
+                    <button type="submit" value="Cadastrar" class="btn btn-success" title="Cadastrar">
+                        <img src="~/Images/ic_check_black_18dp.png" /> Cadastrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-1">
+            <a href="#" class="btn btn-warning" onclick="history.go(-1); return false;" tabindex="11">
+                <img src="~/Images/ic_arrow_back_black_18dp.png" title="Voltar" />
+                Voltar
+            </a>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.dateMask').mask('00/00/0000');
+    });
+
+
+
+    $("#btn").click(function () {
+        $("#btn").hide();
+
+        var cont = "";
+
+        $.ajax({
+            url: "/employee/returncont/",
+            type: 'POST',
+            cache: false,
+            async: false,
+            success: function (data) {
+                cont = data;
+            }
+        });
+
+        var idDiv = "idDiv_" + cont;
+        var idNameDependent = "dependentName" + cont;
+        var nameDependent = "DependentName[" + cont + "]";
+        var removeDependent = "RemoveDependent[" + cont + "]";
+
+        $(".enableShow").prepend("<div class='row' id='" + idDiv + "'><div class='col-md-3 col-sm-6 col-xs-8'><label class='control-label' for='" + nameDependent + "'>Nome Dependente *</label><input class='form-control' required='required' data-val='true' data-val-maxlength='Desculpe, o campo Nome Dependente pode ter no máximo 100 caracteres' data-val-maxlength-max='100' data-val-required='Por favor, informe o campo Nome Dependente' id='" + nameDependent + "' maxlength='100' name='" + nameDependent + "' required='required' type='text' value=''><span class='field-validation-valid' data-valmsg-for='" + nameDependent + "' data-valmsg-replace='true' ></span></div><div class='col-md-3 col-sm-6 col-xs-12'><label for='" + removeDependent + "'>Excluir Dependente *</label><br><table><tbody><tr><td><input data-val='true' data-val-required='Por favor, informe o campo Gênero' id='" + removeDependent + "' name='" + removeDependent + "' required='required' type='radio' value='S'> <label for='Sim'>Sim</label><input id='" + removeDependent + "' name='" + removeDependent + "' required='required' t type='radio' value='N' checked='checked' ><label for='Não'>Não</label></td></tr></tbody></table><span class='field-validation-valid' data-valmsg-for='" + removeDependent + "' data-valmsg-replace='true'></span></div></div><br />");
+
+        $("#btn").fadeIn();
+
+        return false;
+    });
+</script>

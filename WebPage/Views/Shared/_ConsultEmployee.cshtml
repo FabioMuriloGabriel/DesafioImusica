@@ -1,0 +1,196 @@
+﻿@model PagedList.IPagedList<DAL.DTO.ConsultEmployeeDTO>
+@using PagedList.Mvc;
+
+@{
+    string employeeName = string.Empty;
+    foreach (var item in Model)
+    {
+        employeeName = item.NamePesq;
+        break;
+    }
+}
+
+@if (employeeName == "Não há")
+{
+    <div id="contentPager">
+        @Html.PagedListPager(Model, page => Url.Action("listemployee", new { page  }))
+    </div>
+}
+else
+{
+    <div id="contentPager">
+        @Html.PagedListPager(Model, page => Url.Action("findnameemployee", new { employeeName, page }))
+    </div>
+}
+
+<div class="table-responsive" id="content">
+    <fieldset>
+        <table class="table table-condensed table-bordered">
+            <tr class="info">
+                <th style="width:8%">
+                    Ação
+                </th>
+                <th>
+                    Nome
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Gênero
+                </th>
+                <th>
+                    Nascimento
+                </th>
+                <th>
+                    Cargo
+                </th>
+                <th>
+                    Dependente(s)
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                if (item.Count != 0)
+                {
+                    <tr>
+                        <td>
+                            <div class="btn-toolbar">
+                                <div class="btn-group btn-group-justified" role="group">
+                                    <a href="@Url.Action("register", "employee", new { item.EmployeeId })" role="button">
+                                        <img src="~/Images/ic_create_black_18dp_1x.png" title="Editar" class="btn btn-warning btn-xs" />
+                                    </a>
+                                    
+                                    <a id="delete" data-id="'@item.EmployeeId'" onclick="returnEmployeeID('@item.EmployeeId')" role="button" data-toggle="modal" data-target="#myModal">
+                                        <img src="~/Images/ic_delete_black_18dp.png" title="Remover" class="btn btn-danger btn-xs openDialog" />
+                                    </a>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">Atenção</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Confirma a remoção do registro?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    @Html.TextBoxFor(modelItem => item.ReturnID, new { @class = "form-control", @readonly = "readonly", @style = "width:30%; display:none;", @id = "delId", @value = "delId" })
+                                                    
+                                                    <a onclick="DeleteEmployee()" role="button" class="btn btn-primary">
+                                                        <img src="~/Images/ic_check_black_18dp_1x.png" />
+                                                        Remover
+                                                    </a>
+                                                    
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Genre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Birth)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Role)
+                        </td>
+                        <td>
+                            @if (item.DependentName != "Não há")
+                            {
+                                <a onclick="returnDependentName('@item.EmployeeId');returnName('@item.EmployeeId')" role="button" data-toggle="modal" href="#myModalDependent">
+                                    <img src="~/Images/ic_description_black_18dp_1x.png" class="btn btn-info btn-xs" title="Visualizar dependente(s)" />
+                                </a>
+
+                                <div class="modal fade" id="myModalDependent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="myModalLabel">Dependentes</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                Esses são os dependentes do funcionário: @Html.LabelFor(model => item.Name, new { @id = "nameId", @value = "nameId" })
+                                                <br />
+                                                Dependente(s): @Html.LabelFor(model => item.DependentName, new { @id = "dependentNameId", @value = "dependentNameId" })
+                                                <br />
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => item.DependentName)
+                            }
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr style="color: red;">
+                        <td colspan="9" style="font-size:x-large">
+                            Não existem registros
+                        </td>
+                    </tr>
+                }
+            }
+            <tfoot>
+                @foreach (var item in Model)
+                {
+                    if (item.Count != 0)
+                    {
+                        <tr>
+                            <td colspan="10" style="font-size:large">
+                                <p style="color: deepskyblue">
+                                    Quantidade de registros: @item.Count
+                                </p>
+                            </td>
+                        </tr>
+                        break;
+                    }
+                }
+
+            </tfoot>
+
+        </table>
+    </fieldset>
+</div>
+
+@foreach (var item in Model)
+{
+    employeeName = item.NamePesq;
+    break;
+}
+
+@if (employeeName == "Não há")
+{
+    <div id="contentPager">
+        @Html.PagedListPager(Model, page => Url.Action("listemployee", new { page }))
+    </div>
+}
+else
+{
+    <div id="contentPager">
+        @Html.PagedListPager(Model, page => Url.Action("findnameemployee", new { employeeName, page }))
+    </div>
+}

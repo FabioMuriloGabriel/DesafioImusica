@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="@Url.Content("~/Images/Logo_iMusicaVerticalTwitter.png")" alt="fa-check" />
+    <title>@ViewBag.Title - Desáfio iMúsica</title>
+
+    @Styles.Render("~/Layout/css")
+    @Scripts.Render("~/bundles/jsTop")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top ">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-left" href="/home/index" style="height: 40px; width: 40px"><img src="/Images/Logo_iMusicaVerticalTwitter.png" style="height: 40px; width: 40px ; background-color:white"></a>
+                <a class="navbar-brand" href="/home/index" style="margin-left:5px">Desafio iMúsica</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            Funcionário
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li>@Html.ActionLink("Consulta", "listemployee", "employee")</li>
+                            <li role="separator" class="divider"></li>
+                            <li>@Html.ActionLink("Cadastro", "register", "employee")</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="container body-content">
+        <br /><br />
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Desafio iMúsica - Fábio Murilo Gabriel</p>
+        </footer>
+    </div>
+    @Scripts.Render("~/Layout/jsDown")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DB_Challenge_ImusicaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Dependent">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Employee" Type="Guid" Nullable="false" />
+    <NavigationProperty Name="Employee1" Relationship="Self.FKDependentEmployee" FromRole="Dependent" ToRole="Employee" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Genre" Type="Boolean" Nullable="false" />
+    <Property Name="Birth" Type="DateTime" Precision="3" />
+    <Property Name="Role" Type="Int16" Nullable="false" />
+    <NavigationProperty Name="Dependent" Relationship="Self.FKDependentEmployee" FromRole="Employee" ToRole="Dependent" />
+    <NavigationProperty Name="Role1" Relationship="Self.FKEmployeeRole" FromRole="Employee" ToRole="Role" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Employee" Relationship="Self.FKEmployeeRole" FromRole="Role" ToRole="Employee" />
+  </EntityType>
+  <Association Name="FKDependentEmployee">
+    <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+    <End Role="Dependent" Type="Self.Dependent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Dependent">
+        <PropertyRef Name="Employee" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FKEmployeeRole">
+    <End Role="Role" Type="Self.Role" Multiplicity="1" />
+    <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Employee">
+        <PropertyRef Name="Role" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Connection" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Dependent" EntityType="Self.Dependent" />
+    <EntitySet Name="Employee" EntityType="Self.Employee" />
+    <EntitySet Name="Role" EntityType="Self.Role" />
+    <AssociationSet Name="FKDependentEmployee" Association="Self.FKDependentEmployee">
+      <End Role="Employee" EntitySet="Employee" />
+      <End Role="Dependent" EntitySet="Dependent" />
+    </AssociationSet>
+    <AssociationSet Name="FKEmployeeRole" Association="Self.FKEmployeeRole">
+      <End Role="Role" EntitySet="Role" />
+      <End Role="Employee" EntitySet="Employee" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "General";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br /><br />
+
+<div class="col-md-12">
+    <div class="col-middle">
+        <div class="text-center text-center">
+            <h1 class="error-number">General</h1>
+            <h2>Ops desculpe, ocorreu o seguinte erro General!</h2>
+
+            @if (TempData["mensagemErro"] != null)
+            {
+                <div class="row">
+                    <div class="alert alert-dismissible alert-danger col-md-12 col-sm-12 col-xs-12" style="font-size:large">
+                        <img src="~/Images/ic_warning_black_18dp_1x.png" style="height:30px" />
+                        @Html.Raw(@TempData["mensagemErro"])
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<a href="#" class="btn btn-warning" onclick="history.go(-1); return false;" tabindex="1">
+    <img src="~/Images/ic_arrow_back_black_18dp.png" title="Voltar" /> Voltar
+</a>
