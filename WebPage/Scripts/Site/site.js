@@ -1,4 +1,5 @@
-﻿function returnDependentName(employeeId) {
+﻿//retorna os dependentes associados a um funcionario
+function returnDependentName(employeeId) {
     $.ajax({
         url: "/employee/returndependentname/" + employeeId,
         type: 'POST',
@@ -10,6 +11,7 @@
     });
 }
 
+//retorna o nome do funcionario
 function returnName(employeeId) {
     $.ajax({
         url: "/employee/returnemployeename/" + employeeId,
@@ -22,11 +24,13 @@ function returnName(employeeId) {
     });
 }
 
+//retorna o id fo funcionario
 function returnEmployeeID(id) {
     $("#delId").text(id);
     $("#delId").val(id);
 }
 
+//pesquisa funcionario pelo nome
 function findNameEmployee() {
     var employeeName = $("#findName").val();
     employeeName = escape(employeeName);
@@ -47,6 +51,7 @@ function findNameEmployee() {
     });
 }
 
+//remove funcionario e seus dependentes
 function DeleteEmployee() {
     var employeeId = $("#delId").val();
     var employeeName = $("#findName").val();

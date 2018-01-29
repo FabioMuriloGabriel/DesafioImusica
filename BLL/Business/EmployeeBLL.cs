@@ -77,8 +77,8 @@ namespace BLL.Business
                 {
                     if (registerEmployeeDTO.Birth.Length > 10)
                         concat.AppendLine("Desculpe, o campo Nascimento pode ter no máximo 10 caracteres");
-                    else if (Convert.ToDateTime(DateTime.Now.ToShortDateString()).Year - Convert.ToDateTime(registerEmployeeDTO.Birth).Year < 16)
-                        concat.AppendLine("Desculpe, o campo Nascimento deve conter uma data que some mais de 16 anos! ");
+                    else if (Convert.ToDateTime(DateTime.Now.ToShortDateString()).Year - Convert.ToDateTime(registerEmployeeDTO.Birth).Year <= 16)
+                        concat.AppendLine("Desculpe, o campo Nascimento deve conter uma data que some mais ou seja igual a 16 anos! ");
                 }
 
                 if (registerEmployeeDTO.RoleId == 0)
