@@ -31,35 +31,11 @@ namespace DAL.Persistence
             {
                 List<Employee> list_A = new List<Employee>();
 
-                int total = 0;
-                int skip = 0;
-                int pass = 0;
-                bool truth = false;
-
                 if (page != null)
                 {
-                    if (!truth)
-                    {
-                        skip = Convert.ToInt32(pageSize) * (Convert.ToInt32(page) - 1);
-                        pass = Convert.ToInt32(pageSize) * (Convert.ToInt32(page) - 1);
-                    }
+                    int skip = Convert.ToInt32(pageSize) * (Convert.ToInt32(page) - 1);
 
                     list_A = Con.Employee.OrderBy(e => e.Name).Skip(skip).Take(Convert.ToInt32(pageSize)).ToList();
-
-                    if (list_A.Count < pageSize)
-                    {
-                        page = 1;
-                        truth = true;
-                        skip = 0;
-                    }
-                    else
-                        truth = false;
-
-                    total = total + Con.Employee.Count();
-                    if (truth && pass > total)
-                        skip = pass - total;
-                    if (skip < 0)
-                        skip = 0;
                 }
                 else
                 {
@@ -81,35 +57,11 @@ namespace DAL.Persistence
             {
                 List<Employee> list_A = new List<Employee>();
 
-                int total = 0;
-                int skip = 0;
-                int pass = 0;
-                bool truth = false;
-
                 if (page != null)
                 {
-                    if (!truth)
-                    {
-                        skip = Convert.ToInt32(pageSize) * (Convert.ToInt32(page) - 1);
-                        pass = Convert.ToInt32(pageSize) * (Convert.ToInt32(page) - 1);
-                    }
+                    int skip = Convert.ToInt32(pageSize) * (Convert.ToInt32(page) - 1);
 
                     list_A = Con.Employee.Where(e => e.Name.Contains(employeeName)).OrderBy(e => e.Name).Skip(skip).Take(Convert.ToInt32(pageSize)).ToList();
-
-                    if (list_A.Count < pageSize)
-                    {
-                        page = 1;
-                        truth = true;
-                        skip = 0;
-                    }
-                    else
-                        truth = false;
-
-                    total = total + Con.Employee.Where(e => e.Name.Contains(employeeName)).Count();
-                    if (truth && pass > total)
-                        skip = pass - total;
-                    if (skip < 0)
-                        skip = 0;
                 }
 
                 return list_A;
